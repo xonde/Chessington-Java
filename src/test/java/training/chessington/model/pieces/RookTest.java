@@ -1,5 +1,6 @@
 package training.chessington.model.pieces;
 
+import org.junit.Before;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
@@ -12,10 +13,17 @@ import static training.chessington.model.pieces.PieceAssert.*;
 import static org.assertj.core.api.Assertions.*;
 
 public class RookTest {
+
+    private Board board;
+    private Rook rook = new Rook(PlayerColour.WHITE);
+
+    @Before
+    public void setup() {
+        board = Board.empty();
+    }
+
     @Test
     public void rookCanMoveHorizontally() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -34,8 +42,6 @@ public class RookTest {
 
     @Test
     public void rookCannotMoveToOwnSquare() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -46,8 +52,6 @@ public class RookTest {
 
     @Test
     public void rookCanMoveVertically() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -66,8 +70,6 @@ public class RookTest {
 
     @Test
     public void rookCanCaptureOpposingPieceHorizontally() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -82,8 +84,6 @@ public class RookTest {
 
     @Test
     public void rookCanCaptureOpposingPieceVertically() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -98,8 +98,6 @@ public class RookTest {
 
     @Test
     public void rookIsBlockedByFriendlyPieceHorizontally() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -118,8 +116,6 @@ public class RookTest {
 
     @Test
     public void rookIsBlockedByFriendlyPieceVertically() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -138,8 +134,6 @@ public class RookTest {
 
     @Test
     public void rookCannotPassThroughOpposingPieceHorizontally() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 
@@ -157,8 +151,6 @@ public class RookTest {
 
     @Test
     public void rookCannotPassThroughOpposingPieceVertically() {
-        Board board = Board.empty();
-        Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, rook);
 

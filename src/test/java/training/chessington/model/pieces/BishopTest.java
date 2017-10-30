@@ -1,5 +1,6 @@
 package training.chessington.model.pieces;
 
+import org.junit.Before;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
@@ -12,10 +13,17 @@ import static training.chessington.model.pieces.PieceAssert.*;
 import static org.assertj.core.api.Assertions.*;
 
 public class BishopTest {
+
+    private Board board;
+    private Bishop bishop = new Bishop(PlayerColour.WHITE);
+
+    @Before
+    public void setup() {
+        board = Board.empty();
+    }
+
     @Test
     public void bishopCanMoveDiagonally() {
-        Board board = Board.empty();
-        Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, bishop);
 
@@ -40,8 +48,6 @@ public class BishopTest {
 
     @Test
     public void bishopCanCaptureOpposingPiece() {
-        Board board = Board.empty();
-        Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(4, 4);
         board.placePiece(coords, bishop);
 
@@ -56,8 +62,6 @@ public class BishopTest {
 
     @Test
     public void bishopCannotMoveThroughOpposingPiece() {
-        Board board = Board.empty();
-        Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(4, 4);
         board.placePiece(coords, bishop);
 
@@ -75,8 +79,6 @@ public class BishopTest {
 
     @Test
     public void bishopIsBlockedByFriendlyPiece() {
-        Board board = Board.empty();
-        Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(4, 4);
         board.placePiece(coords, bishop);
 

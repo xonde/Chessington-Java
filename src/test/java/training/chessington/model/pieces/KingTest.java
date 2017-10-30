@@ -1,5 +1,6 @@
 package training.chessington.model.pieces;
 
+import org.junit.Before;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
@@ -13,10 +14,16 @@ import static org.assertj.core.api.Assertions.*;
 
 public class KingTest {
 
+    private Board board;
+    private King king = new King(PlayerColour.WHITE);
+
+    @Before
+    public void setup() {
+        board = Board.empty();
+    }
+
     @Test
     public void kingCanMoveToAdjacentSquares() {
-        Board board = Board.empty();
-        Piece king = new King(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(4, 4);
         board.placePiece(coords, king);
 
@@ -36,8 +43,6 @@ public class KingTest {
 
     @Test
     public void kingCanTakeOpposingPiece() {
-        Board board = Board.empty();
-        Piece king = new King(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(4, 4);
         board.placePiece(coords, king);
 
@@ -52,8 +57,6 @@ public class KingTest {
 
     @Test
     public void kingCannotTakeFriendlyPiece() {
-        Board board = Board.empty();
-        Piece king = new King(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(4, 4);
         board.placePiece(coords, king);
 
@@ -68,8 +71,6 @@ public class KingTest {
 
     @Test
     public void kingCannotLeaveBoard() {
-        Board board = Board.empty();
-        Piece king = new King(PlayerColour.WHITE);
         Coordinates coords = new Coordinates(0, 0);
         board.placePiece(coords, king);
 
