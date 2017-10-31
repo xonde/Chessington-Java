@@ -126,4 +126,28 @@ public class PawnTest {
         assertThat(blackMoves).doesNotContain(new Move(blackCoords, blackCoords.plus(2, 0)));
         assertThat(whiteMoves).doesNotContain(new Move(blackCoords, blackCoords.plus(-2, 0)));
     }
+
+    @Test
+    public void whitePawnsCannotMoveAtTopOfBoard() {
+        Board board = Board.empty();
+        Piece pawn = new Pawn(PlayerColour.WHITE);
+        Coordinates coords = new Coordinates(0, 4);
+        board.placePiece(coords, pawn);
+
+        List<Move> moves = pawn.getAllowedMoves(coords, board);
+
+        assertThat(moves).isEmpty();
+    }
+
+    @Test
+    public void blackPawnsCannotMoveAtBottomOfBoard() {
+        Board board = Board.empty();
+        Piece pawn = new Pawn(PlayerColour.BLACK);
+        Coordinates coords = new Coordinates(7, 4);
+        board.placePiece(coords, pawn);
+
+        List<Move> moves = pawn.getAllowedMoves(coords, board);
+
+        assertThat(moves).isEmpty();
+    }
 }
