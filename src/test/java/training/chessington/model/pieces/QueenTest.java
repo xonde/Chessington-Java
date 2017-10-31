@@ -9,8 +9,7 @@ import training.chessington.model.PlayerColour;
 
 import java.util.List;
 
-import static training.chessington.model.pieces.PieceAssert.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class QueenTest {
 
@@ -113,7 +112,7 @@ public class QueenTest {
     }
 
     @Test
-    public void queenisBlockedByFriendlyPieces() {
+    public void queenIsBlockedByFriendlyPieces() {
         Coordinates coords = new Coordinates(3, 4);
         board.placePiece(coords, queen);
 
