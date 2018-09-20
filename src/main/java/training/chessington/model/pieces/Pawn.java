@@ -6,6 +6,7 @@ import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Pawn extends AbstractPiece {
@@ -16,27 +17,24 @@ public class Pawn extends AbstractPiece {
     @Override
     public List<Move> getAllowedMoves(Coordinates from, Board board) {
         ArrayList<Move> allowedMoves = new ArrayList<>();
+        HashMap<String,Move> moveSet = this.setMoves(from, board);
 
-        //Move(coords, coords.plus(-1, 0))
-
-        if(this.colour == PlayerColour.WHITE){
-            if(from.getRow() == 6){
-                allowedMoves.add(new Move(from,from.plus(-1,0)));
-                allowedMoves.add(new Move(from,from.plus(-2,0)));
+        if(from.getRow() == 6 | from.getRow() == 1){
+            if(checkIfMovesIsOnBoard(moveSet.get("Forward one step"), 7)){
+                allowedMoves.add(moveSet.get("Forward one step"));
             }
-            else if (from.getRow() != 0){
-                allowedMoves.add(new Move(from,from.plus(-1,0)));
+            if(checkIfMovesIsOnBoard(moveSet.get("Forward two steps"), 7)){
+                allowedMoves.add(moveSet.get("Forward two steps"));
+            }
+
+        }
+        else if (from.getRow() != 0 | from.getRow() != 7){
+            if(checkIfMovesIsOnBoard(moveSet.get("Forward one step"), 7)){
+                allowedMoves.add(moveSet.get("Forward one step"));
             }
         }
-        else if(this.colour == PlayerColour.BLACK){
-            if(from.getRow() == 1){
-                allowedMoves.add(new Move(from,from.plus(1,0)));
-                allowedMoves.add(new Move(from,from.plus(2,0)));
-            }
-            else if (from.getRow() != 7){
-                allowedMoves.add(new Move(from,from.plus(1,0)));
-            }
-        }
+
+        ArrayList<Move> toRemove = new ArrayList<>();
 
         boolean clearFMoves = false;
         for(Move i: allowedMoves){
@@ -54,51 +52,59 @@ public class Pawn extends AbstractPiece {
             allowedMoves.clear();
         }
 
-        Move moveDL = null;
-        Move moveDR = null;
+        Move moveDL = moveSet.get("Diagonal left one step");
+        Move moveDR = moveSet.get("Diagonal right one step");
 
-
-        if(this.colour == PlayerColour.WHITE){
-            Coordinates diagonalLeft = new Coordinates(from.getRow()-1,from.getCol()-1);
-            Coordinates diagonalRight = new Coordinates(from.getRow()-1,from.getCol()+1);
-            moveDL = new Move(from, diagonalLeft);
-            moveDR = new Move(from, diagonalRight);
-
-
-        }
-        else{
-            Coordinates diagonalLeft = new Coordinates(from.getRow()+1,from.getCol()-1);
-            Coordinates diagonalRight = new Coordinates(from.getRow()+1,from.getCol()+1);
-            moveDL = new Move(from, diagonalLeft);
-            moveDR = new Move(from, diagonalRight);
-        }
-
-
-
-        if( moveDL.getTo().getRow() >= 0 && moveDL.getTo().getRow() <= 7){
-            if( moveDL.getTo().getCol() >= 0 && moveDL.getTo().getCol() <= 7){
-                if( moveDR.getTo().getRow() >= 0 && moveDR.getTo().getRow() <= 7){
-                    if( moveDR.getTo().getCol() >= 0 && moveDR.getTo().getCol() <= 7){
-                                if(board.get(moveDL.getTo()) != null && board.get(moveDL.getTo()).getColour() != this.colour){
-                                    allowedMoves.add(moveDL);
-                                }
-                                if(board.get(moveDR.getTo()) != null && board.get(moveDR.getTo()).getColour() != this.colour){
-                                    allowedMoves.add(moveDR);
-                                }
-                    }
-                }
+        if(checkIfMovesIsOnBoard(moveDL,7) && checkIfMovesIsOnBoard(moveDR,7)){
+            if(checkIfCoordinateIsOccupied(board,moveDL.getTo()) && !checkIfSameColour(this, board.get(moveDL.getTo()))){
+                allowedMoves.add(moveDL);
+            }
+            if(checkIfCoordinateIsOccupied(board,moveDR.getTo()) && !checkIfSameColour(this, board.get(moveDR.getTo()))){
+                allowedMoves.add(moveDR);
             }
         }
 
-        //Checks if Move is within board
-        //Check if colours are different
-        //Checks if piece is on a coord
-
-
-
-
-
-            //w:0 b:7
         return allowedMoves;
+    }
+
+    public boolean checkIfMovesIsOnBoard(Move move, int max){
+        boolean onBoard = false;
+        if(move.getTo().getCol() <= max && move.getTo().getCol() >= 0){
+            if(move.getTo().getRow() <= max && move.getTo().getRow() >= 0){
+                onBoard = true;
+            }
+        }
+        return onBoard;
+    }
+
+    public boolean checkIfCoordinateIsOccupied(Board board, Coordinates coord){
+        boolean isOccupied = false;
+        if(board.get(coord) != null){
+            isOccupied = true;
+        }
+        return isOccupied;
+    }
+
+    public boolean checkIfSameColour(Piece x, Piece y){
+        boolean isSameColour = true;
+        if(x.getColour() != y.getColour()){
+            isSameColour = false;
+        }
+        return isSameColour;
+    }
+
+    public HashMap<String,Move> setMoves(Coordinates from, Board board){
+        HashMap<String,Move> moveSet = new HashMap<>();
+        int rowMultiplier = 1;
+        if(this.colour == PlayerColour.WHITE){
+            rowMultiplier = -1;
+        }
+
+        moveSet.put("Forward one step", new Move(from,from.plus(rowMultiplier,0)));
+        moveSet.put("Forward two steps", new Move(from,from.plus(2*rowMultiplier,0)));
+        moveSet.put("Diagonal left one step", new Move(from, from.plus(rowMultiplier,-1)));
+        moveSet.put("Diagonal right one step", new Move(from, from.plus(rowMultiplier,+1)));
+
+        return moveSet;
     }
 }
