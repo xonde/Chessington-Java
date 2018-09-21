@@ -19,23 +19,29 @@ public class Pawn extends AbstractPiece {
         ArrayList<Move> allowedMoves = new ArrayList<>();
         HashMap<String,Move> moveSet = this.setMoves(from, board);
 
-        if(from.getRow() == 6 | from.getRow() == 1){
-            if(checkIfMovesIsOnBoard(moveSet.get("Forward one step"), 7)){
-                allowedMoves.add(moveSet.get("Forward one step"));
-            }
-            if(checkIfMovesIsOnBoard(moveSet.get("Forward two steps"), 7)){
-                allowedMoves.add(moveSet.get("Forward two steps"));
-            }
 
+        createForwardMoves(from,allowedMoves,moveSet);
+        checkBlockedMoves(board,allowedMoves);
+
+
+
+
+        Move moveDL = moveSet.get("Diagonal left one step");
+        Move moveDR = moveSet.get("Diagonal right one step");
+
+        if(checkIfMovesIsOnBoard(moveDL,7) && checkIfMovesIsOnBoard(moveDR,7)){
+            if(checkIfCoordinateIsOccupied(board,moveDL.getTo()) && !checkIfSameColour(this, board.get(moveDL.getTo()))){
+                allowedMoves.add(moveDL);
+            }
+            if(checkIfCoordinateIsOccupied(board,moveDR.getTo()) && !checkIfSameColour(this, board.get(moveDR.getTo()))){
+                allowedMoves.add(moveDR);
+            }
         }
-        else if (from.getRow() != 0 | from.getRow() != 7){
-            if(checkIfMovesIsOnBoard(moveSet.get("Forward one step"), 7)){
-                allowedMoves.add(moveSet.get("Forward one step"));
-            }
-        }
 
-        ArrayList<Move> toRemove = new ArrayList<>();
+        return allowedMoves;
+    }
 
+    public void checkBlockedMoves(Board board, ArrayList<Move> allowedMoves){
         boolean clearFMoves = false;
         for(Move i: allowedMoves){
             if(board.get(i.getTo()) != null){
@@ -51,20 +57,23 @@ public class Pawn extends AbstractPiece {
         if(clearFMoves){
             allowedMoves.clear();
         }
+    }
 
-        Move moveDL = moveSet.get("Diagonal left one step");
-        Move moveDR = moveSet.get("Diagonal right one step");
-
-        if(checkIfMovesIsOnBoard(moveDL,7) && checkIfMovesIsOnBoard(moveDR,7)){
-            if(checkIfCoordinateIsOccupied(board,moveDL.getTo()) && !checkIfSameColour(this, board.get(moveDL.getTo()))){
-                allowedMoves.add(moveDL);
+    public void createForwardMoves(Coordinates from, ArrayList<Move> allowedMoves, HashMap<String, Move> moveSet){
+        if(from.getRow() == 6 | from.getRow() == 1){
+            if(checkIfMovesIsOnBoard(moveSet.get("Forward one step"), 7)){
+                allowedMoves.add(moveSet.get("Forward one step"));
             }
-            if(checkIfCoordinateIsOccupied(board,moveDR.getTo()) && !checkIfSameColour(this, board.get(moveDR.getTo()))){
-                allowedMoves.add(moveDR);
+            if(checkIfMovesIsOnBoard(moveSet.get("Forward two steps"), 7)){
+                allowedMoves.add(moveSet.get("Forward two steps"));
+            }
+
+        }
+        else if (from.getRow() != 0 | from.getRow() != 7){
+            if(checkIfMovesIsOnBoard(moveSet.get("Forward one step"), 7)){
+                allowedMoves.add(moveSet.get("Forward one step"));
             }
         }
-
-        return allowedMoves;
     }
 
     public boolean checkIfMovesIsOnBoard(Move move, int max){
